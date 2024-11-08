@@ -1,20 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import PantallaPrincipal from './src/pantallas/PantallaPrincipal';
+import PantallaBusqueda from './src/pantallas/PantallaBusqueda';
+import PantallaDetallePlato from './src/pantallas/PantallaDetallePlato';
+import { ProovedorMenu } from './src/contextos/ContextoMenu';
 
-export default function App() {
+const Pila = createStackNavigator();
+export default NavegadorAplicacion = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ProovedorMenu>
+      <NavigationContainer>
+        <Pila.Navigator>
+          <Pila.Screen name="PantallaPrincipal" component={PantallaPrincipal}/>
+          <Pila.Screen name="PantallaBusqueda" component={PantallaBusqueda}/>
+          <Pila.Screen name="PantallaDetallePlato" component={PantallaDetallePlato}/>
+        </Pila.Navigator>
+      </NavigationContainer>
+    </ProovedorMenu>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+};
