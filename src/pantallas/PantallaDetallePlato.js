@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { servicioSpoonacular } from '../servicios/ApiSpoonacular';
 import { useMenu } from '../contextos/ContextoMenu';
 import BotonAccion from '../componentes/BotonAccion';
@@ -41,6 +41,38 @@ const PantallaDetallePlato = ({ route, navigation }) => {
     }
   };
 
+  const obtenerPasosInstrucciones = (instruccionesHtml) => {
+    // Verifica si el texto incluye <li> y procesa cada elemento
+    if (instruccionesHtml.includes('<li>')) {
+      const regex = /<li>(.*?)<\/li>/g;
+      const pasos = [];
+      let match;
+      while ((match = regex.exec(instruccionesHtml)) !== null) {
+        pasos.push(match[1].replace(/<\/?[^>]+(>|$)/g, "").trim()); // Remover etiquetas y limpiar espacios
+      }
+      return pasos;
+    }
+
+    // Verifica si el texto incluye <p> y procesa cada párrafo
+    if (instruccionesHtml.includes('<p>')) {
+      const regex = /<p>(.*?)<\/p>/g;
+      const pasos = [];
+      let match;
+      while ((match = regex.exec(instruccionesHtml)) !== null) {
+        pasos.push(match[1].replace(/<\/?[^>]+(>|$)/g, "").trim());
+      }
+      return pasos;
+    }
+
+    // Si no tiene etiquetas HTML de lista, divide por saltos de línea
+    if (instruccionesHtml.includes('\n')) {
+      return instruccionesHtml.split('\n').map(paso => paso.trim()).filter(Boolean);
+    }
+
+    // Como último recurso, devuelve el texto completo como un solo paso
+    return [instruccionesHtml.trim()];
+  };
+
   if (cargando) {
     return (
       <View style={estilos.contenedorCarga}>
@@ -76,7 +108,13 @@ const PantallaDetallePlato = ({ route, navigation }) => {
         {detalles && (
           <View>
             <Text style={estilos.seccionTitulo}>Instrucciones:</Text>
-            <Text>{detalles.instrucciones}</Text>
+            <FlatList 
+              data={obtenerPasosInstrucciones(detalles.instrucciones)}
+              renderItem={({ item, index }) => (
+                <Text style={estilos.instruccionPaso}>{index + 1}. {item}</Text>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
           </View>
         )}
 
@@ -122,6 +160,10 @@ const estilos = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 16,
     marginBottom: 8
+  },
+  instruccionPaso: {
+    fontSize: 16,
+    marginVertical: 4
   }
 });
 
