@@ -1,3 +1,4 @@
+// src/pantallas/PantallaPrincipal.js
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { useMenu } from '../contextos/ContextoMenu';
@@ -20,14 +21,10 @@ const PantallaPrincipal = () => {
   return (
     <View style={estilos.contenedor}>
       <Text style={estilos.titulo}>Menú del Hotel</Text>
-      
-      {/* Resumen del Menú */}
       <View style={estilos.resumen}>
         <Text>Precio Total: ${precioTotal.toFixed(2)}</Text>
         <Text>Health Score Promedio: {puntuacionSaludPromedio.toFixed(2)}</Text>
       </View>
-
-      {/* Lista de Platos */}
       <FlatList
         data={platosMenu}
         keyExtractor={(plato) => plato.id.toString()}
@@ -44,8 +41,6 @@ const PantallaPrincipal = () => {
           </Text>
         }
       />
-
-      {/* Botón para Buscar Platos */}
       <BotonAccion 
         titulo="Buscar Platos" 
         onPress={irAPantallaBusqueda}

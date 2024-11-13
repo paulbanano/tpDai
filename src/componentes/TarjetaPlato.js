@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const TarjetaPlato = ({ plato, onPress, onAgregar, onEliminar }) => {
@@ -69,4 +69,5 @@ const estilos = StyleSheet.create({
     marginLeft: 10
   }
 });
+
 export default TarjetaPlato;
