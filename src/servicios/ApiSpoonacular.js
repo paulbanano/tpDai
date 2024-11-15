@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const CLAVE_API = '704ea787faca4103a88e49dfb0835cbd'; 
+const CLAVE_API = '1225dd87655a41a6a1eb4c270d55a3ab'; 
 const URL_BASE = 'https://api.spoonacular.com/recipes';
 
 export const servicioSpoonacular = {
