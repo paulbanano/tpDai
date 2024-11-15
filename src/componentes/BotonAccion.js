@@ -1,9 +1,12 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const BotonAccion = ({ titulo, onPress }) => {
+const BotonAccion = ({ titulo, onPress, color = '#007bff' }) => {
   return (
-    <TouchableOpacity style={estilos.boton} onPress={onPress}>
+    <TouchableOpacity 
+      style={[estilos.boton, { backgroundColor: color }]} 
+      onPress={onPress}
+    >
       <Text style={estilos.texto}>{titulo}</Text>
     </TouchableOpacity>
   );
@@ -11,7 +14,6 @@ const BotonAccion = ({ titulo, onPress }) => {
 
 const estilos = StyleSheet.create({
   boton: {
-    backgroundColor: '#007bff',
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 6,

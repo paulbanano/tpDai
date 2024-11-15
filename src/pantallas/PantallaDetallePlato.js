@@ -8,7 +8,10 @@ const PantallaDetallePlato = ({ route, navigation }) => {
   const { plato } = route.params;
   const [detalles, setDetalles] = useState(null);
   const [cargando, setCargando] = useState(true);
-  const { agregarPlatoAlMenu } = useMenu();
+  const { platosMenu, agregarPlatoAlMenu, eliminarPlatoDelMenu } = useMenu();
+
+  // Verificar si el plato ya está en el menú
+  const estaEnMenu = platosMenu.some((p) => p.id === plato.id);
 
   useEffect(() => {
     const cargarDetalles = async () => {
@@ -25,52 +28,21 @@ const PantallaDetallePlato = ({ route, navigation }) => {
     cargarDetalles();
   }, [plato.id]);
 
-  const handleAgregarPlato = () => {
-    const platoParaAgregar = {
-      id: plato.id,
-      titulo: plato.titulo || detalles.titulo,
-      imagen: plato.imagen || detalles.imagen,
-      precio: plato.precio || detalles.precio,
-      puntuacionSalud: plato.puntuacionSalud || detalles.puntuacionSalud,
-      vegano: plato.vegano || detalles.vegano
-    };
-
-    const agregado = agregarPlatoAlMenu(platoParaAgregar);
-    if (agregado) {
-      navigation.goBack();
+  const handleAccionPlato = () => {
+    if (estaEnMenu) {
+      eliminarPlatoDelMenu(plato.id);
+    } else {
+      const platoParaAgregar = {
+        id: plato.id,
+        titulo: plato.titulo || detalles.titulo,
+        imagen: plato.imagen || detalles.imagen,
+        precio: plato.precio || detalles.precio,
+        puntuacionSalud: plato.puntuacionSalud || detalles.puntuacionSalud,
+        vegano: plato.vegano || detalles.vegano
+      };
+      agregarPlatoAlMenu(platoParaAgregar);
     }
-  };
-
-  const obtenerPasosInstrucciones = (instruccionesHtml) => {
-    // Verifica si el texto incluye <li> y procesa cada elemento
-    if (instruccionesHtml.includes('<li>')) {
-      const regex = /<li>(.*?)<\/li>/g;
-      const pasos = [];
-      let match;
-      while ((match = regex.exec(instruccionesHtml)) !== null) {
-        pasos.push(match[1].replace(/<\/?[^>]+(>|$)/g, "").trim()); // Remover etiquetas y limpiar espacios
-      }
-      return pasos;
-    }
-
-    // Verifica si el texto incluye <p> y procesa cada párrafo
-    if (instruccionesHtml.includes('<p>')) {
-      const regex = /<p>(.*?)<\/p>/g;
-      const pasos = [];
-      let match;
-      while ((match = regex.exec(instruccionesHtml)) !== null) {
-        pasos.push(match[1].replace(/<\/?[^>]+(>|$)/g, "").trim());
-      }
-      return pasos;
-    }
-
-    // Si no tiene etiquetas HTML de lista, divide por saltos de línea
-    if (instruccionesHtml.includes('\n')) {
-      return instruccionesHtml.split('\n').map(paso => paso.trim()).filter(Boolean);
-    }
-
-    // Como último recurso, devuelve el texto completo como un solo paso
-    return [instruccionesHtml.trim()];
+    navigation.goBack(); // Vuelve a la pantalla anterior después de la acción
   };
 
   if (cargando) {
@@ -109,7 +81,7 @@ const PantallaDetallePlato = ({ route, navigation }) => {
           <View>
             <Text style={estilos.seccionTitulo}>Instrucciones:</Text>
             <FlatList 
-              data={obtenerPasosInstrucciones(detalles.instrucciones)}
+              data={detalles.instrucciones.split('\n')}
               renderItem={({ item, index }) => (
                 <Text style={estilos.instruccionPaso}>{index + 1}. {item}</Text>
               )}
@@ -119,8 +91,9 @@ const PantallaDetallePlato = ({ route, navigation }) => {
         )}
 
         <BotonAccion 
-          titulo="Agregar al Menú" 
-          onPress={handleAgregarPlato} 
+          titulo={estaEnMenu ? "Eliminar del Menú" : "Agregar al Menú"}
+          onPress={handleAccionPlato}
+          color={estaEnMenu ? 'red' : '#007bff'} 
         />
       </View>
     </ScrollView>
