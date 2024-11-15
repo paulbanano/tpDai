@@ -5,7 +5,7 @@ import { useMenu } from '../contextos/ContextoMenu';
 import BarraBusqueda from '../componentes/BarraBusqueda';
 import TarjetaPlato from '../componentes/TarjetaPlato';
 
-const PantallaBusqueda = () => {
+const PantallaBusqueda = ({ navigation }) => {
   const { resultadosBusqueda, cargando, buscarPlatos } = useBusqueda();
   const { agregarPlatoAlMenu } = useMenu();
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
@@ -16,13 +16,13 @@ const PantallaBusqueda = () => {
   };
 
   const handleAgregarPlato = (plato) => {
-    const agregado = agregarPlatoAlMenu({
+    agregarPlatoAlMenu({
       id: plato.id,
       titulo: plato.titulo,
       imagen: plato.imagen,
       precio: plato.precio,
       puntuacionSalud: plato.puntuacionSalud,
-      vegano: plato.vegano
+      vegano: plato.vegano,
     });
   };
 
@@ -48,8 +48,8 @@ const PantallaBusqueda = () => {
         renderItem={({ item }) => (
           <TarjetaPlato 
             plato={item}
-            onPress={() => {/* Ir a detalle */}}
             onAgregar={() => handleAgregarPlato(item)}
+            onVerDetalles={() => navigation.navigate('PantallaDetallePlato', { plato: item })}
           />
         )}
       />
@@ -61,20 +61,20 @@ const estilos = StyleSheet.create({
   contenedor: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: '#f5f5f5',
   },
   titulo: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   textoVacio: {
     textAlign: 'center',
     marginTop: 20,
     color: '#888',
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 });
 
 export default PantallaBusqueda;

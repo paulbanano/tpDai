@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const TarjetaPlato = ({ plato, onPress, onAgregar, onEliminar }) => {
+const TarjetaPlato = ({ plato, onPress, onAgregar, onEliminar, onVerDetalles }) => {
   return (
     <TouchableOpacity style={estilos.tarjeta} onPress={onPress}>
       <Image 
@@ -25,6 +25,9 @@ const TarjetaPlato = ({ plato, onPress, onAgregar, onEliminar }) => {
               <Icon name="trash" size={24} color="red" />
             </TouchableOpacity>
           )}
+          <TouchableOpacity onPress={onVerDetalles} style={estilos.boton}>
+            <Icon name="eye" size={24} color="blue" />
+          </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>
@@ -43,31 +46,31 @@ const estilos = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3
+    elevation: 3,
   },
   imagen: {
     width: 80,
     height: 80,
     borderRadius: 10,
-    marginRight: 15
+    marginRight: 15,
   },
   contenedorTexto: {
-    flex: 1
+    flex: 1,
   },
   titulo: {
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   subTitulo: {
     fontSize: 14,
-    color: '#666'
+    color: '#666',
   },
   contenedorBotones: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   boton: {
-    marginLeft: 10
-  }
+    marginLeft: 10,
+  },
 });
 
 export default TarjetaPlato;
